@@ -10,10 +10,20 @@ or interest earned.
 
 
 def calculator(initial, monthly, APY, years):
-    print('Initial deposit: ' + initial)
-    print('Monthly contribution: ' + monthly)
-    print('APY: ' + APY)
-    print('Years calcuting: ' + years)
+    total_bal = 0
+    apy_ratio = APY / 100
+    month_contribute = monthly * years 
+    intial_interest = initial * apy_ratio
+
+    contribution_interest = 0
+    years_count = years
+    
+    for i in years:
+        contribution_interest += (monthly * apy_ratio) * years_count
+        years_count -= 1
+
+
+    #End balance is intial contribution + total monthly contribution + initial interest + monthly contribution interest
 
 
 def main():
