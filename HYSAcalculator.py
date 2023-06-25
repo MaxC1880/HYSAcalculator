@@ -12,19 +12,22 @@ or interest earned.
 def calculator(initial, monthly, APY, years):
     total_bal = 0
     apy_ratio = APY / 100
-    month_contribute = monthly * years 
-    intial_interest = initial * apy_ratio
+    monthly_contribute = monthly * (years * 12)
 
     contribution_interest = 0
-    years_count = years
+    months_count = (years * 12)
+
+    for i in (0, (years * 12)):
+        contribution_interest += (monthly * apy_ratio * months_count)
+        months_count -= 1
     
-    for i in years:
-        contribution_interest += (monthly * apy_ratio) * years_count
-        years_count -= 1
+    total_bal = initial  + monthly_contribute + contribution_interest
+    printResults(initial, monthly, APY, years, total_bal)
 
 
-    #End balance is intial contribution + total monthly contribution + initial interest + monthly contribution interest
-
+def printResults(initial, monthly, APY, years, total_bal):
+    print('\nYour initial deposit was: $' + str(initial) + '\nYour monthly contributions were: $' + str(monthly) + '\nYour APY was: ' + str(APY) + '%' +  
+          '\nYour years looking to calcualte was: ' + str(years) + ' years \nYour total balance in your savings after ' + str(years) + ' years is: $' + str(total_bal))
 
 def main():
 
@@ -33,12 +36,12 @@ def main():
             initial = float (input ('Initial deposit: '))
             monthly = float (input ('Monthly Contribution: '))
             apy = float (input ('APY: '))
-            years = float (input ('Years: '))
+            years = int (input ('Years (in whole numebrs): '))
             break
             
 
         except(ValueError):
-            print('Wrong')
+            print('Wrong input try again\n')
         
 
     calculator(initial, monthly, apy, years)
