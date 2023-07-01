@@ -27,7 +27,7 @@ def printResults(initial, monthly, APY, years, total_bal):
     print('\nYour initial deposit was: $' + str(initial) + '\nYour monthly contributions were: $' + str(monthly) + '\nYour APY was: ' + str(APY) + '%' +  
           '\nYour years looking to calcualte was: ' + str(years) + ' years \nYour total balance in your savings after ' + str(years) + ' years is: $' + str(total_bal))
 
-def get_positive_float_input(prompt):
+def get_inputs(prompt):
     while True:
         try:
             value = float(input(prompt))
@@ -38,10 +38,10 @@ def get_positive_float_input(prompt):
         except ValueError:
             print("Invalid input, please enter a valid number")
 
-initial = get_positive_float_input("Initial deposit: ")
-monthly = get_positive_float_input("Monthly contributions: ")
-apy = get_positive_float_input("APY percentage: ")
-years = get_positive_float_input("Years to calculate: ")
+initial = get_inputs("Initial deposit: ")
+monthly = get_inputs("Monthly contributions: ")
+apy = get_inputs("APY percentage: ")
+years = get_inputs("Years to calculate: ")
 
         
 def main():
