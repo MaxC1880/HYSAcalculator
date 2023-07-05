@@ -5,7 +5,7 @@ The result will be a number at the end of the year, as well as a graph that disp
 Possible extras could include a bar graph or just numbers that display how much of the final amount was the initial, monthly deposit,
 or interest earned.
 '''
-import tkinter
+import tkinter as tk
 
 def calculator(initial, monthly, APY, years):
     apy_ratio = APY / 100
@@ -38,13 +38,17 @@ def get_inputs(prompt):
         except ValueError:
             print("Invalid input, please enter a valid number")
 
-initial = get_inputs("Initial deposit: ")
-monthly = get_inputs("Monthly contributions: ")
-apy = get_inputs("APY percentage: ")
-years = get_inputs("Years to calculate: ")
-
         
 def main():
+
+    m = tk.Tk(className = "High Yield Savings Calculator")
+    m.geometry("800x600")
+    m.mainloop()
+
+    initial = get_inputs("Initial deposit: ")
+    monthly = get_inputs("Monthly contributions: ")
+    apy = get_inputs("APY percentage: ")
+    years = get_inputs("Years to calculate: ")
     calculator(initial, monthly, apy, years)    
 
 main()
