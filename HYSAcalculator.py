@@ -45,6 +45,38 @@ def main():
     m.geometry("800x600")
     m.mainloop()
 
+
+import tkinter as tk
+from tkinter import Label, font, Entry
+
+def display_results():
+ print()
+
+def main():
+    m = tk.Tk(className = "high yield savings Calculator")
+    m.geometry("800x600")
+
+    initial_question = Label(m, text = 'Initial Deposit:', font=('Times', 20))
+    initial_question.place(x = 10, y = 10)
+
+    initial = Entry(m, width=12, font=('Arial 22'))
+    initial.place(x = 180, y = 12)
+    
+
+    monthly_question = Label(m, text = 'Monthly Deposit:', font=('Times', 20))
+    monthly_question.place(x = 8, y = 90)
+
+    monthly = Entry(m, width=12, font=('Arial 22'))
+    monthly.place(x = 208, y = 90)
+
+
+    button = tk.Button(text="Calculate", width=10, height=4, bg="black", fg="white", command = display_results)
+    button['font'] = font.Font(size = 15)
+    button.place(x = 650, y = 400)
+    m.mainloop()
+
+
+
     initial = get_inputs("Initial deposit: ")
     monthly = get_inputs("Monthly contributions: ")
     apy = get_inputs("APY percentage: ")
