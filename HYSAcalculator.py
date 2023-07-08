@@ -7,9 +7,9 @@ or interest earned.
 '''
 import tkinter as tk
 from tkinter import Label, font, Entry
-#from matplotlib.figure import Figure
-#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-#import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
 
 def calculator(initial, monthly, APY, years):
     apy_ratio = APY / 100
@@ -45,39 +45,43 @@ def display_results():
  print()
 
 def main():
-    m = tk.Tk(className = "high yield savings Calculator")
+    m = tk.Tk(className="high yield savings calculator")
     m.attributes('-fullscreen', True)
-    
-    canvas = tk.Canvas(m, height=100)
-    line = canvas.create_line(0, 100, m.winfo_width(), 50, fill="black")
-    canvas.pack(side="top", fill="x")
 
+    canvas = tk.Canvas(m, width=400, height=300)
+    canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
+    canvas.pack(fill="both", expand=True)
 
-    initial_question = Label(m, text = 'Initial Deposit:', font=('Times', 20))
-    initial_question.place(x = 8, y = 10)
-    initial = Entry(m, width=12, font=('Arial 22'))
-    initial.place(x = 10, y = 50)
-    
+    title = tk.Label(m, text="High Yield Savings Calculator", font=("Georgia", 40))
+    title.pack()
+    screen_width = m.winfo_screenwidth()
+    x_coordinate = screen_width // 2
+    title.place(x=x_coordinate, y=18, anchor="n")
 
-    monthly_question = Label(m, text = 'Monthly Deposit:', font=('Times', 20))
-    monthly_question.place(x = 8, y = 115)
-    monthly = Entry(m, width=12, font=('Arial 22'))
-    monthly.place(x = 10, y = 155)
+    initial_question = tk.Label(m, text='Initial Deposit:', font=('Times', 20))
+    initial_question.place(x=8, y=170)
+    initial = tk.Entry(m, width=20, font=('Arial 22'))
+    initial.place(x=10, y=220)
 
+    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Times', 20))
+    monthly_question.place(x=8, y=275)
+    monthly = tk.Entry(m, width=20, font=('Arial 22'))
+    monthly.place(x=10, y=315)
 
-    APY_question = Label(m, text = 'APY:', font = ('Times', 20))
-    APY_question.place(x = 8, y = 220)
-    APY = Entry(m, width = 12, font = ('Arial 22'))
-    APY.place(x = 10, y = 260)
+    APY_question = tk.Label(m, text='APY:', font=('Times', 20))
+    APY_question.place(x=8, y=380)
+    APY = tk.Entry(m, width=20, font=('Arial 22'))
+    APY.place(x=10, y=420)
 
-    years_question = Label(m, text = 'Years to calculate:' , font = ('Times', 20))
-    years_question.place(x = 8, y = 325)
-    years = Entry(m, width = 12, font = ('Arial 22'))
-    years.place(x = 10, y = 365)
+    years_question = tk.Label(m, text='Years to calculate:', font=('Times', 20))
+    years_question.place(x=8, y=485)
+    years = tk.Entry(m, width=20, font=('Arial 22'))
+    years.place(x=10, y=525)
 
-    button = tk.Button(text="Calculate", width=10, height=4, bg="black", fg="white", command = display_results)
-    button['font'] = font.Font(size = 15)
-    button.place(x = 650, y = 400)
+    button = tk.Button(text="Calculate", width=10, height=4, bg="black", fg="white", command=display_results)
+    button['font'] = font.Font(size=15)
+    button.place(x=650, y=400)
+
     m.mainloop()
 
 
@@ -90,3 +94,25 @@ def main():
 '''
 main()
 
+
+
+'''
+fig = Figure(figsize=(5, 4), dpi=100)
+    subplot = fig.add_subplot(111)
+
+    # Prepare the data for the pie chart
+    labels = ['A', 'B', 'C', 'D']
+    sizes = [15, 30, 45, 10]
+    explode = (0, 0.1, 0, 0)  # Explode the second slice (optional)
+
+    # Create the pie chart
+    subplot.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+    subplot.axis('equal')  # Equal aspect ratio ensures the pie is circular
+
+    # Create a FigureCanvasTkAgg widget to display the graph in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=m)
+    canvas.draw()
+
+    # Place the graph in the Tkinter window
+    canvas.get_tk_widget().pack()
+    '''
