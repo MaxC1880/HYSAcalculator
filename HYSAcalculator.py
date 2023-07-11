@@ -6,92 +6,73 @@ Possible extras could include a bar graph or just numbers that display how much 
 or interest earned.
 '''
 import tkinter as tk
-from tkinter import Label, font, Entry
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
-def calculator(initial, monthly, APY, years):
-    apy_ratio = APY / 100
-    total_monthly = (monthly * 12) * years
-    total_months = int((years * 12))
-    count = years
+m = tk.Tk(className="high yield savings calculator")
+m.attributes('-fullscreen', True)
 
-    contribution_interest = 0
+canvas = tk.Canvas(m, width=400, height=300)
+canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
+canvas.pack(fill="both", expand=True)
 
-    for i in range (0, total_months):
-        contribution_interest += (monthly * apy_ratio * count)
-    
-    total_bal = initial  + total_monthly + contribution_interest
-    printResults(initial, monthly, APY, years, total_bal)
+title = tk.Label(m, text="High Yield Savings Calculator", font=("Mistral 60 bold"))
+title.pack()
+screen_width = m.winfo_screenwidth()
+x_coordinate = screen_width // 2
+title.place(x=x_coordinate, y=18, anchor="n")
 
+initial_var = tk.StringVar()
+monthly_var = tk.StringVar()
+APY_var = tk.StringVar()
+years_var = tk.StringVar()
 
-def printResults(initial, monthly, APY, years, total_bal):
-    print('\nYour initial deposit was: $' + str(initial) + '\nYour monthly contributions were: $' + str(monthly) + '\nYour APY was: ' + str(APY) + '%' +  
-          '\nYour years looking to calcualte was: ' + str(years) + ' years \nYour total balance in your savings after ' + str(years) + ' years is: $' + str(total_bal))
-
-def get_inputs(prompt):
-    while True:
-        try:
-            value = float(input(prompt))
-            if value < 0:
-                print("Error, input cannot be less than 0")
-            else:
-                return value
-        except ValueError:
-            print("Invalid input, please enter a valid number")
-
-def display_results():
- print()
+def submit():
+ 
+    initial = initial_var.get()
+    monthly=monthly_var.get()
+    APY = APY_var.get()
+    years = years_var.get()
+     
+    print("The initial is : " + initial)
+    #initial_question = tk.Label(m, text='Initial Deposit:', font=('Times', 20))
+    #initial_question.place(x=400, y=170)
+    #initial_question = tk.Label(m, text=initial, font=('Times', 20))
+    #initial_question.place(x=550, y=170) 
 
 def main():
-    m = tk.Tk(className="high yield savings calculator")
-    m.attributes('-fullscreen', True)
 
-    canvas = tk.Canvas(m, width=400, height=300)
-    canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
-    canvas.pack(fill="both", expand=True)
+    '''Label the questions'''
+    initial_question = tk.Label(m, text='Initial Deposit:', font=('Georgia', 20), anchor = 'center')
+    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Georgia', 20), anchor = 'center')
+    APY_question = tk.Label(m, text='APY:', font=('Georgia', 20), anchor = 'center')  
+    years_question = tk.Label(m, text='Years to calculate:', font=('Georgia', 20), anchor = 'center')
 
-    title = tk.Label(m, text="High Yield Savings Calculator", font=("Georgia", 40))
-    title.pack()
-    screen_width = m.winfo_screenwidth()
-    x_coordinate = screen_width // 2
-    title.place(x=x_coordinate, y=18, anchor="n")
-
-    initial_question = tk.Label(m, text='Initial Deposit:', font=('Times', 20))
+    '''Place the questions'''
     initial_question.place(x=8, y=170)
-    initial = tk.Entry(m, width=20, font=('Arial 22'))
-    initial.place(x=10, y=220)
-
-    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Times', 20))
     monthly_question.place(x=8, y=275)
-    monthly = tk.Entry(m, width=20, font=('Arial 22'))
-    monthly.place(x=10, y=315)
-
-    APY_question = tk.Label(m, text='APY:', font=('Times', 20))
     APY_question.place(x=8, y=380)
-    APY = tk.Entry(m, width=20, font=('Arial 22'))
-    APY.place(x=10, y=420)
-
-    years_question = tk.Label(m, text='Years to calculate:', font=('Times', 20))
     years_question.place(x=8, y=485)
-    years = tk.Entry(m, width=20, font=('Arial 22'))
-    years.place(x=10, y=525)
 
-    button = tk.Button(text="Calculate", width=10, height=4, bg="black", fg="white", command=display_results)
-    button['font'] = font.Font(size=15)
-    button.place(x=650, y=400)
+    '''Make the input box'''
+    initial_box = tk.Entry(m, textvariable = initial_var,  width=20, font=('Arial 22'))
+    monthly_box = tk.Entry(m, textvariable = monthly_var, width=20, font=('Arial 22'))
+    APY_box= tk.Entry(m, textvariable = APY_var, width=20, font=('Arial 22'))
+    years_box = tk.Entry(m, textvariable = years_var, width=20, font=('Arial 22'))
+
+    '''Place the input boxes'''
+    initial_box.place(x=10, y=220)
+    monthly_box.place(x=10, y=315)
+    APY_box.place(x=10, y=420)
+    years_box.place(x=10, y=525)
+
+    button = tk.Button(text="Bar Graph", width=20, height=5, bg="black", fg="white", font = ('Georgia', 20), command = submit)
+    button.place(x=10, y=650)
 
     m.mainloop()
 
 
-'''
-    initial = get_inputs("Initial deposit: ")
-    monthly = get_inputs("Monthly contributions: ")
-    apy = get_inputs("APY percentage: ")
-    years = get_inputs("Years to calculate: ")
-    calculator(initial, monthly, apy, years)    
-'''
 main()
 
 
