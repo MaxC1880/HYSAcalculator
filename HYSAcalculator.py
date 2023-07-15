@@ -20,26 +20,43 @@ canvas.pack(fill="both", expand=True)
 title = tk.Label(m, text="High Yield Savings Calculator", font=("Mistral 60 bold"))
 title.pack()
 screen_width = m.winfo_screenwidth()
-x_coordinate = screen_width // 2
-title.place(x=x_coordinate, y=18, anchor="n")
+center = screen_width // 2
+quarter = screen_width // 1.5
+title.place(x=center, y=18, anchor="n")
 
 initial_var = tk.StringVar()
 monthly_var = tk.StringVar()
 APY_var = tk.StringVar()
 years_var = tk.StringVar()
 
+
+def calculate(initial, monthly, APY, years):
+    apy_ratio = APY / 100
+    total_monthly = (monthly * 12) * years
+    total_months = int((years * 12))
+    count = years
+    contribution_interest = 0
+    for i in range (0, total_months):
+        contribution_interest += (monthly * apy_ratio * count)
+    
+    total = initial  + total_monthly + contribution_interest
+    return total
+
 def submit():
- 
-    initial = initial_var.get()
-    monthly=monthly_var.get()
-    APY = APY_var.get()
-    years = years_var.get()
-     
-    print("The initial is : " + initial)
-    #initial_question = tk.Label(m, text='Initial Deposit:', font=('Times', 20))
-    #initial_question.place(x=400, y=170)
-    #initial_question = tk.Label(m, text=initial, font=('Times', 20))
-    #initial_question.place(x=550, y=170) 
+    
+    try:
+        initial = float(initial_var.get())
+        monthly = float(monthly_var.get())
+        APY = float(APY_var.get())
+        years = int(years_var.get())
+            
+        total = calculate(initial, monthly, APY, years)
+        total_bal = tk.Label(m, text = 'Total balance is $' + str(total), fg = 'green', font = ('Modern', 40))
+        total_bal.place(x = quarter, y = 165, anchor = 'n')
+        
+    except ValueError:
+        error = tk.Label(m, text = 'Please enter a valid number', fg = 'red', font = ('Georgia', 20), anchor = 'center')
+        error.place(x = center, y = 165, anchor = 'n')
 
 def main():
 
