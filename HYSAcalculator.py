@@ -35,12 +35,12 @@ def calculate(initial, monthly, APY, years):
         contribution_interest += (monthly * apy_ratio * count)
     
     total = initial  + total_monthly + contribution_interest
-    return total
+    return total, contribution_interest, total_monthly
 
 total_bal = None
 error_msg = None
 
-def display_total_balance(total):
+def display_total_balance(total, contribution_interest, initial, total_monthly ):
     global total_bal
 
     if total_bal:
@@ -48,6 +48,29 @@ def display_total_balance(total):
     else:
         total_bal = tk.Label(m, text='Total balance is $' + str(total), fg='green', font=('Modern', 40))
         total_bal.place(x=quarter, y=165, anchor='n')
+
+    display_pie_graph(initial, total_monthly, contribution_interest)
+
+
+def display_pie_graph(initial, total_monthly, contribution_interest):
+    fig = Figure(figsize=(5, 4), dpi=100)
+    subplot = fig.add_subplot(111)
+
+    # Prepare the data for the pie chart
+    labels = ['Initial', 'Contributions', 'Interest']
+    sizes = [initial, total_monthly, contribution_interest]
+    explode = (0, 0, 0)  # Explode the second slice (optional)
+
+    # Create the pie chart
+    subplot.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
+    subplot.axis('equal')  # Equal aspect ratio ensures the pie is circular
+
+    # Create a FigureCanvasTkAgg widget to display the graph in the Tkinter window
+    canvas = FigureCanvasTkAgg(fig, master=m)
+    canvas.draw()
+
+    # Place the graph in the Tkinter window
+    canvas.get_tk_widget().place(x=800, y=350)
 
 def display_error_message():
     global error_msg
@@ -79,10 +102,10 @@ def submit():
         years = int(years_var.get())
 
         # Calculate the total balance
-        total = calculate(initial, monthly, APY, years)
+        total, contribution_interest, total_monthly = calculate(initial, monthly, APY, years)
 
         # Display the total balance
-        display_total_balance(total)
+        display_total_balance(total, contribution_interest, initial, total_monthly )
 
     except ValueError:
         # Display the error message
@@ -115,7 +138,7 @@ def main():
     years_box.place(x=10, y=525)
     
     #Make and place the button
-    button = tk.Button(text="Bar Graph", width=20, height=5, bg="black", fg="white", font = ('Georgia', 20), command = submit)
+    button = tk.Button(text="Calculate", width=20, height=5, bg="black", fg="white", font = ('Georgia', 20), command = submit)
     button.place(x=10, y=650)
 
     m.mainloop()
@@ -125,23 +148,3 @@ main()
 
 
 
-'''
-fig = Figure(figsize=(5, 4), dpi=100)
-    subplot = fig.add_subplot(111)
-
-    # Prepare the data for the pie chart
-    labels = ['A', 'B', 'C', 'D']
-    sizes = [15, 30, 45, 10]
-    explode = (0, 0.1, 0, 0)  # Explode the second slice (optional)
-
-    # Create the pie chart
-    subplot.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
-    subplot.axis('equal')  # Equal aspect ratio ensures the pie is circular
-
-    # Create a FigureCanvasTkAgg widget to display the graph in the Tkinter window
-    canvas = FigureCanvasTkAgg(fig, master=m)
-    canvas.draw()
-
-    # Place the graph in the Tkinter window
-    canvas.get_tk_widget().pack()
-    '''
