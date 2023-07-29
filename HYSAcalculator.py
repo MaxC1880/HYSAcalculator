@@ -5,15 +5,20 @@ The result will be a number at the end of the year, as well as a graph that disp
 Possible extras could include a bar graph or just numbers that display how much of the final amount was the initial, monthly deposit,
 or interest earned.
 '''
+
+#Imports
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
 
+#Make tknter window with classname and size
 m = tk.Tk(className="high yield savings calculator")
 m.attributes('-fullscreen', True)
 
-canvas = tk.Canvas(m, width=400, height=300)
+#Create canvas to draw and do animations
+canvas = tk.Canvas(m, width=m.winfo_screenwidth(), height=m.winfo_screenheight())
 canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
 canvas.pack(fill="both", expand=True)
 
@@ -51,26 +56,39 @@ def display_total_balance(total, contribution_interest, initial, total_monthly )
 
     display_pie_graph(initial, total_monthly, contribution_interest)
 
-
 def display_pie_graph(initial, total_monthly, contribution_interest):
-    fig = Figure(figsize=(5, 4), dpi=100)
+    fig = Figure(figsize=(6, 4), dpi=110)
     subplot = fig.add_subplot(111)
 
     # Prepare the data for the pie chart
     labels = ['Initial', 'Contributions', 'Interest']
     sizes = [initial, total_monthly, contribution_interest]
-    explode = (0, 0, 0)  # Explode the second slice (optional)
-
+    explode = (0.1, 0.1, 0.1)  # Explode the second slice (optional)
+    colors = ('yellow', 'cyan', 'green')
+    wp = { 'linewidth' : 0.5, 'edgecolor' : "red" }
     # Create the pie chart
-    subplot.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
+    wedges, texts, autotexts = subplot.pie(sizes,
+                                  autopct = '%1.1f%%',
+                                  explode = explode,
+                                  shadow = True,
+                                  colors = colors,
+                                  startangle = 90,
+                                  wedgeprops = wp,
+                                  textprops = dict(color ="black"))
     subplot.axis('equal')  # Equal aspect ratio ensures the pie is circular
 
+    #Make legend, 1st and 2nd are location, 3rd and 4th are size 
+    subplot.legend(wedges, labels,
+          title ="Entries",
+          bbox_to_anchor=(0.18, 1.1)) 
+    
+    
     # Create a FigureCanvasTkAgg widget to display the graph in the Tkinter window
-    canvas = FigureCanvasTkAgg(fig, master=m)
-    canvas.draw()
+    piegraph = FigureCanvasTkAgg(fig, master=m)
+    piegraph.draw()
 
     # Place the graph in the Tkinter window
-    canvas.get_tk_widget().place(x=800, y=350)
+    piegraph.get_tk_widget().place(x=quarter, y=300, anchor = 'n')
 
 def display_error_message():
     global error_msg
