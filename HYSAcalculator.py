@@ -57,18 +57,23 @@ def display_total_balance(total, contribution_interest, initial, total_monthly )
     display_pie_graph(initial, total_monthly, contribution_interest)
 
 def display_pie_graph(initial, total_monthly, contribution_interest):
-    fig = Figure(figsize=(6, 4), dpi=110)
+
+    #Make canvas where we can draw plots and graph
+    fig = Figure(figsize=(6, 4), dpi=130)
+
+    #Make subplot so we have place to plot our pie graph
     subplot = fig.add_subplot(111)
 
     # Prepare the data for the pie chart
     labels = ['Initial', 'Contributions', 'Interest']
     sizes = [initial, total_monthly, contribution_interest]
-    explode = (0.1, 0.1, 0.1)  # Explode the second slice (optional)
+    explode = (0.1, 0.1, 0.1)  # Seperation of our pie datas
     colors = ('yellow', 'cyan', 'green')
     wp = { 'linewidth' : 0.5, 'edgecolor' : "red" }
+
     # Create the pie chart
     wedges, texts, autotexts = subplot.pie(sizes,
-                                  autopct = '%1.1f%%',
+                                    autopct = '%1.1f%%',
                                   explode = explode,
                                   shadow = True,
                                   colors = colors,
@@ -83,12 +88,12 @@ def display_pie_graph(initial, total_monthly, contribution_interest):
           bbox_to_anchor=(0.18, 1.1)) 
     
     
-    # Create a FigureCanvasTkAgg widget to display the graph in the Tkinter window
+    # Create a FigureCanvasTkAgg widget that binds the graph in the Tkinter window
     piegraph = FigureCanvasTkAgg(fig, master=m)
     piegraph.draw()
 
     # Place the graph in the Tkinter window
-    piegraph.get_tk_widget().place(x=quarter, y=300, anchor = 'n')
+    piegraph.get_tk_widget().place(x=quarter, y=290, anchor = 'n')
 
 def display_error_message():
     global error_msg
