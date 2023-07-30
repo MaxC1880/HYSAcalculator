@@ -18,11 +18,11 @@ m = tk.Tk(className="high yield savings calculator")
 m.attributes('-fullscreen', True)
 
 #Create canvas to draw and do animations
-canvas = tk.Canvas(m, width=m.winfo_screenwidth(), height=m.winfo_screenheight())
+canvas = tk.Canvas(m, width=m.winfo_screenwidth(), height=m.winfo_screenheight(), bg="white")
 canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
 canvas.pack(fill="both", expand=True)
 
-title = tk.Label(m, text="High Yield Savings Calculator", font=("Mistral 60 bold"))
+title = tk.Label(m, text="High Yield Savings Calculator", font=("Mistral 60 bold"), bg="white")
 title.pack()
 screen_width = m.winfo_screenwidth()
 center, quarter = screen_width // 2, screen_width // 1.5
@@ -51,7 +51,7 @@ def display_total_balance(total, contribution_interest, initial, total_monthly )
     if total_bal:
         total_bal.config(text='Total balance is $' + str(total))
     else:
-        total_bal = tk.Label(m, text='Total balance is $' + str(total), fg='green', font=('Modern', 40))
+        total_bal = tk.Label(m, text='Total balance is $' + str(total), fg='green', font=('Modern', 40), bg="white")
         total_bal.place(x=quarter, y=165, anchor='n')
 
     display_pie_graph(initial, total_monthly, contribution_interest)
@@ -101,7 +101,7 @@ def display_error_message():
     if error_msg:
         error_msg.config(text='Please enter a valid number')
     else:  
-        error_msg = tk.Label(m, text='Please enter a valid number', fg='red', font=('Georgia', 20), anchor='center')
+        error_msg = tk.Label(m, text='Please enter a valid number', fg='red', font=('Georgia', 20), anchor='center', bg="white")
         error_msg.place(x=center, y=165, anchor='n')
 
 def remove_widgets():
@@ -137,10 +137,10 @@ def submit():
 def main():
 
     #Label the questions
-    initial_question = tk.Label(m, text='Initial Deposit:', font=('Georgia', 20), anchor = 'center')
-    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Georgia', 20), anchor = 'center')
-    APY_question = tk.Label(m, text='APY:', font=('Georgia', 20), anchor = 'center')  
-    years_question = tk.Label(m, text='Years to calculate:', font=('Georgia', 20), anchor = 'center')
+    initial_question = tk.Label(m, text='Initial Deposit:', font=('Georgia', 20), anchor = 'n', bg="white")
+    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Georgia', 20), anchor = 'n', bg="white")
+    APY_question = tk.Label(m, text='APY:', font=('Georgia', 20), anchor = 'n', bg="white")  
+    years_question = tk.Label(m, text='Years to calculate:', font=('Georgia', 20), anchor = 'n',bg="white")
 
     #Place the questions
     initial_question.place(x=8, y=170)
@@ -149,10 +149,10 @@ def main():
     years_question.place(x=8, y=485)
 
     #Make the input box
-    initial_box = tk.Entry(m, textvariable = initial_var,  width=20, font=('Arial 22'))
-    monthly_box = tk.Entry(m, textvariable = monthly_var, width=20, font=('Arial 22'))
-    APY_box= tk.Entry(m, textvariable = APY_var, width=20, font=('Arial 22'))
-    years_box = tk.Entry(m, textvariable = years_var, width=20, font=('Arial 22'))
+    initial_box = tk.Entry(m, textvariable = initial_var,  width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    monthly_box = tk.Entry(m, textvariable = monthly_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    APY_box= tk.Entry(m, textvariable = APY_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    years_box = tk.Entry(m, textvariable = years_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
 
     #Place the input boxes
     initial_box.place(x=10, y=220)
@@ -161,8 +161,8 @@ def main():
     years_box.place(x=10, y=525)
     
     #Make and place the button
-    button = tk.Button(text="Calculate", width=20, height=5, bg="black", fg="white", font = ('Georgia', 20), command = submit)
-    button.place(x=10, y=650)
+    button = tk.Button(text="$Calculate$", width=12, height=5, bg="white", fg="green", font = ('Castellar 20 bold'), anchor = 'center', command = submit, borderwidth=0, highlightthickness=0)
+    button.place(x=10, y=600)
 
     m.mainloop()
 
