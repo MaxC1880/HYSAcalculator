@@ -13,11 +13,11 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
-#Make tknter window with classname and size
+# Make tkinter window with classname and size
 m = tk.Tk(className="high yield savings calculator")
 m.attributes('-fullscreen', True)
 
-#Create canvas to draw and do animations
+# Create canvas to draw and do animations
 canvas = tk.Canvas(m, width=m.winfo_screenwidth(), height=m.winfo_screenheight(), bg="white")
 canvas.create_line(0, 120, m.winfo_screenwidth(), 120, fill="black", width=2)
 canvas.pack(fill="both", expand=True)
@@ -36,16 +36,17 @@ def calculate(initial, monthly, APY, years):
     total_months = int((years * 12))
     count = years
     contribution_interest = 0
-    for i in range (0, total_months):
+    for i in range(0, total_months):
         contribution_interest += (monthly * apy_ratio * count)
-    
-    total = initial  + total_monthly + contribution_interest
+
+    total = initial + total_monthly + contribution_interest
     return total, contribution_interest, total_monthly
 
 total_bal = None
 error_msg = None
+piegraph = None
 
-def display_total_balance(total, contribution_interest, initial, total_monthly ):
+def display_total_balance(total, contribution_interest, initial, total_monthly):
     global total_bal
 
     if total_bal:
@@ -57,50 +58,55 @@ def display_total_balance(total, contribution_interest, initial, total_monthly )
     display_pie_graph(initial, total_monthly, contribution_interest)
 
 def display_pie_graph(initial, total_monthly, contribution_interest):
+    global piegraph
 
-    #Make canvas where we can draw plots and graph
+    # Make canvas where we can draw plots and graph
     fig = Figure(figsize=(6, 4), dpi=130)
 
-    #Make subplot so we have place to plot our pie graph
+    # Make subplot so we have place to plot our pie graph
     subplot = fig.add_subplot(111)
 
     # Prepare the data for the pie chart
     labels = ['Initial', 'Contributions', 'Interest']
     sizes = [initial, total_monthly, contribution_interest]
-    explode = (0.1, 0.1, 0.1)  # Seperation of our pie datas
+    explode = (0.1, 0.1, 0.1)  # Separation of our pie datas
     colors = ('yellow', 'cyan', 'green')
-    wp = { 'linewidth' : 0.5, 'edgecolor' : "red" }
+    wp = {'linewidth': 0.5, 'edgecolor': "red"}
 
     # Create the pie chart
     wedges, texts, autotexts = subplot.pie(sizes,
-                                    autopct = '%1.1f%%',
-                                  explode = explode,
-                                  shadow = True,
-                                  colors = colors,
-                                  startangle = 90,
-                                  wedgeprops = wp,
-                                  textprops = dict(color ="black"))
+                                          autopct='%1.1f%%',
+                                          explode=explode,
+                                          shadow=True,
+                                          colors=colors,
+                                          startangle=90,
+                                          wedgeprops=wp,
+                                          textprops=dict(color="black"))
     subplot.axis('equal')  # Equal aspect ratio ensures the pie is circular
 
-    #Make legend, 1st and 2nd are location, 3rd and 4th are size 
+    # Make legend, 1st and 2nd are location, 3rd and 4th are size
     subplot.legend(wedges, labels,
-          title ="Entries",
-          bbox_to_anchor=(0.18, 1.1)) 
-    
-    
+                   title="Entries",
+                   bbox_to_anchor=(0.18, 1.1))
+
     # Create a FigureCanvasTkAgg widget that binds the graph in the Tkinter window
     piegraph = FigureCanvasTkAgg(fig, master=m)
     piegraph.draw()
 
     # Place the graph in the Tkinter window
-    piegraph.get_tk_widget().place(x=quarter, y=290, anchor = 'n')
+    piegraph.get_tk_widget().place(x=quarter, y=290, anchor='n')
+
+def remove_pie_graph():
+    global piegraph
+    if piegraph:
+        piegraph.get_tk_widget().destroy()
 
 def display_error_message():
     global error_msg
 
     if error_msg:
         error_msg.config(text='Please enter a valid number')
-    else:  
+    else:
         error_msg = tk.Label(m, text='Please enter a valid number', fg='red', font=('Georgia', 20), anchor='center', bg="white")
         error_msg.place(x=center, y=165, anchor='n')
 
@@ -111,9 +117,11 @@ def remove_widgets():
         total_bal.destroy()
         total_bal = None
 
-    elif error_msg:
+    if error_msg:
         error_msg.destroy()
         error_msg = None
+
+    remove_pie_graph()
 
 def submit():
     remove_widgets()
@@ -124,37 +132,39 @@ def submit():
         APY = float(APY_var.get())
         years = int(years_var.get())
 
+        if initial < 0 or monthly < 0 or APY < 0 or years < 0:
+            raise ValueError
+
         # Calculate the total balance
         total, contribution_interest, total_monthly = calculate(initial, monthly, APY, years)
 
         # Display the total balance
-        display_total_balance(total, contribution_interest, initial, total_monthly )
+        display_total_balance(total, contribution_interest, initial, total_monthly)
 
     except ValueError:
         # Display the error message
         display_error_message()
 
 def main():
+    # Label the questions
+    initial_question = tk.Label(m, text='Initial Deposit:', font=('Georgia', 20), anchor='n', bg="white")
+    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Georgia', 20), anchor='n', bg="white")
+    APY_question = tk.Label(m, text='APY:', font=('Georgia', 20), anchor='n', bg="white")
+    years_question = tk.Label(m, text='Years to calculate:', font=('Georgia', 20), anchor='n', bg="white")
 
-    #Label the questions
-    initial_question = tk.Label(m, text='Initial Deposit:', font=('Georgia', 20), anchor = 'n', bg="white")
-    monthly_question = tk.Label(m, text='Monthly Deposit:', font=('Georgia', 20), anchor = 'n', bg="white")
-    APY_question = tk.Label(m, text='APY:', font=('Georgia', 20), anchor = 'n', bg="white")  
-    years_question = tk.Label(m, text='Years to calculate:', font=('Georgia', 20), anchor = 'n',bg="white")
-
-    #Place the questions
+    # Place the questions
     initial_question.place(x=8, y=170)
     monthly_question.place(x=8, y=275)
     APY_question.place(x=8, y=380)
     years_question.place(x=8, y=485)
 
-    #Make the input box
-    initial_box = tk.Entry(m, textvariable = initial_var,  width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
-    monthly_box = tk.Entry(m, textvariable = monthly_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
-    APY_box= tk.Entry(m, textvariable = APY_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
-    years_box = tk.Entry(m, textvariable = years_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    # Make the input box
+    initial_box = tk.Entry(m, textvariable=initial_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    monthly_box = tk.Entry(m, textvariable=monthly_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    APY_box = tk.Entry(m, textvariable=APY_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
+    years_box = tk.Entry(m, textvariable=years_var, width=20, font=('Arial 22'), borderwidth=2, highlightthickness=2)
 
-    #Place the input boxes
+    # Place the input boxes
     initial_box.place(x=10, y=220)
     monthly_box.place(x=10, y=315)
     APY_box.place(x=10, y=420)
